@@ -1,6 +1,6 @@
 ### Bootstrapped with DCollage (Digital Collage Boilerplate w/ PIXIJS)
 
-![dC logo](http://content.jrvhost.com/github/dc-logo.png)
+![dcollage logo](https://user-images.githubusercontent.com/36850787/115302781-c7f29c80-a130-11eb-83ef-b7987b9fe23f.png)
 
 DCollage is a lightly opinionated PIXIJS based digital collage boilerplate with game dev aspirations and a component driven paradigm written in TypeScript.
 The goal of DCollage is to facilitate the creation of multi-layered, interactive, collages similar to those I created back in the days of Flash. Surprise it works for simple games too!
