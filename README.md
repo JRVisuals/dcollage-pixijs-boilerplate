@@ -1,6 +1,6 @@
 ### Bootstrapped with DCollage (Digital Collage Boilerplate w/ PIXIJS)
 
-![dC logo](http://content.jrvhost.com/github/dc-logo.png)
+![dcollage logo](https://user-images.githubusercontent.com/36850787/115302598-9b3e8500-a130-11eb-8ad0-fadbcd472425.png)
 
 DCollage is a lightly opinionated PIXIJS based digital collage boilerplate with game dev aspirations and a component driven paradigm written in TypeScript.
 The goal of DCollage is to facilitate the creation of multi-layered, interactive, collages similar to those I created back in the days of Flash. Surprise it works for simple games too!
@@ -15,26 +15,33 @@ Your project description may appear here.
 
 DCollage is meant to get you up and running with a PIXI app in minutes. While there are a lot of nuances that can be tweaked and you are not forced to follow the patterns this boilerplate includes it should be a matter of clone, install, run.
 
+See the wiki for more documentation:
+
+- [wiki](https://github.com/jrod-disco/dcollage-pixijs-boilerplate/wiki)
+- [Patterns and Cookbook page](https://github.com/jrod-disco/dcollage-pixijs-boilerplate/wiki/Patterns-and-Cookbook)
+- Check out the branch `simple-game` for a good starting poit for a game project
+
 ## Clone or Template
 
-- Clone or spin up a new repo using the github template `https://github.com/jrod-disco/dcollage-pixijs-boilerplate.git`
+- Clone or spin up a new repo using `https://github.com/JRVisuals/dcollage-pixijs-boilerplate`
 
 ## Install and Run
 
-- Run `yarn install` at the project root to install all of the `node_modules`
-- Run `yarn start` to begin developing locally `http://localhost:10001/`
+- Run `yarn` at the project root to install all of the `node_modules`
+- Run `yarn dev` to begin developing locally `http://localhost:10001/`
 
-## Have Fun!
+## Basic Setup
 
 - Set the `APP_HEIGHT` and `APP_WIDTH` in `constants/index.ts`
-- Edit `main.ts` to add or remove components from the main container
+- Edit `core.ts` to add or remove components from the main container
+- Set up any screens that you need
 - There is a `components/library` included to help you get started (please contribute yours back to the repo and namespace their directory E.g. `components/library/yourGithubUsername`)
-- Put your assets in `./src/assets` and add anything you want to preload to the `preloader` at the bottom of `main.ts`
+- Put your assets in `./src/assets` and add anything you want to preload to the `preloader` component and at the bottom of `core.ts`
 - Use any of the `components/library` components, or make your own
 
 # Build Scripts
 
-- `yarn start` to go into development mode with live reload
+- `yarn dev` to go into development mode with live reload
 - `yarn clean` to clean the `/dist` directory
 - `yarn build` to create a distributable bundle in `/dist`
 - `yarn docs` to generate markdown documentation in `/docs`
@@ -44,36 +51,14 @@ DCollage is meant to get you up and running with a PIXI app in minutes. While th
   - possible values: `win-x86,win-x64,linux-x86,linux-x64,mac-x64`
 - `yarn all-the-things` to `clean`, `build` and `nwjs-dist`
 
+## Demo Branches
+
+- Check out the branch `simple-game` for a good starting poit for a game project
+- Will be adding other starting branches as we go
+
 # Dev Tools for PIXI
 
 - [Pixi.js devtools Chrome Extension](https://chrome.google.com/webstore/detail/pixijs-devtools/aamddddknhcagpehecnhphigffljadon?hl=en) shows up in your Chrome Dev Tools Panel and can be super helpful - this is why we will usually name our containers w/ `container.name='foo'`
-
-## Concept and Mechanics
-
-TBD
-
-## Roadmap
-
-- [ ] Bootstrap DCollage Boilerplate for PIXI.JS
-
-  - [ ] clone this repo or spin up a repo via github template
-  - [ ] yarn install
-  - [ ] yarn dev
-
-- [ ] Learn how to use it
-
-  - [ ] Peep the [wiki](https://github.com/jrod-disco/dcollage-pixijs-boilerplate/wiki)
-  - [ ] Especially the [Patterns and Cookbook page](https://github.com/jrod-disco/dcollage-pixijs-boilerplate/wiki/Patterns-and-Cookbook)
-  - [ ] Cruise through the example code
-
-- [ ] Make cool stuff
-  - [ ] Have fun doing it
-
-### Completed!
-
-- [x] Discover DCollage Boilerplate for PIXI.JS
-
-  - [x] Read the readme
 
 ## Libraries Used
 
