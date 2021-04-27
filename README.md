@@ -2,14 +2,7 @@
 
 ![dcollage logo](https://user-images.githubusercontent.com/36850787/115302781-c7f29c80-a130-11eb-83ef-b7987b9fe23f.png)
 
-DCollage is a lightly opinionated PIXIJS based digital collage boilerplate with game dev aspirations and a component driven paradigm written in TypeScript.
-The goal of DCollage is to facilitate the creation of multi-layered, interactive, collages similar to those I created back in the days of Flash. Surprise it works for simple games too!
-
-[See the repo WIKI for additional information.](https://github.com/jrod-disco/dcollage-pixijs-boilerplate/wiki)
-
-# Your Project Title
-
-Your project description may appear here.
+DCollage is a lightly opinionated PIXIJS based digital collage boilerplate with game dev aspirations and a component driven paradigm written in TypeScript. The goal of DCollage is to facilitate the creation of multi-layered, interactive, collages similar to those I created back in the days of Flash. Surprise it works for simple games too!
 
 # Getting Started
 
@@ -19,7 +12,7 @@ See the wiki for more documentation:
 
 - [wiki](https://github.com/jrod-disco/dcollage-pixijs-boilerplate/wiki)
 - [Patterns and Cookbook page](https://github.com/jrod-disco/dcollage-pixijs-boilerplate/wiki/Patterns-and-Cookbook)
-- Check out the branch `simple-game` for a good starting poit for a game project
+- Check out the branch `simple-game` for a good starting point for a game project
 
 ## Clone or Template
 
