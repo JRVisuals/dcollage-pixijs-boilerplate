@@ -79,14 +79,14 @@ export const playerCharacter = (
   const initialState = { ...state };
 
   const playerContainer = new PIXI.Container();
-  container.addChild(playerContainer);
+  //container.addChild(playerContainer);
 
   // animated sprite
-  // const playerSprite = new PIXI.AnimatedSprite(anims[PLAYER_MOVEMENT.IDLE]);
-  // playerContainer.addChild(playerSprite);
+  const playerSprite = new PIXI.AnimatedSprite(anims[PLAYER_MOVEMENT.IDLE]);
+  playerContainer.addChild(playerSprite);
 
   // placeholder sprite
-  const playerSprite = new PIXI.Sprite(textures.playerTexture);
+  // const playerSprite = new PIXI.Sprite(textures.playerTexture);
   playerSprite.anchor.set(0.5);
   playerContainer.addChild(playerSprite);
 

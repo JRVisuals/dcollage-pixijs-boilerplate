@@ -58,7 +58,7 @@ const pixiConfig: PixiConfig = {
   resolution: window.devicePixelRatio || 1, // use resolution: >1 to scale up
 };
 // No anti-alias - Uncomment for pixel art
-// PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
 /**
  * @function bootstrapApp
@@ -92,7 +92,7 @@ const bootstrapApp = (props: {
     vignetting: 0.2,
     noise: 0.1,
   });
-  mainContainer.filters = [crtFilter];
+  //mainContainer.filters = [crtFilter];
 
   // Get our preloader assets
   let { spriteSheets } = props;

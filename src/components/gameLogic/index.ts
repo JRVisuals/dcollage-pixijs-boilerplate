@@ -241,10 +241,11 @@ export const gameLogic = (props: Props): GameLogic => {
     window.removeEventListener('keydown', onKeyDownGame);
 
   // Simple Player Component
-  const playerTexture = PIXI.Texture.from('./assets/example/whitebox.png');
+  const playerTexture = PIXI.Texture.from('./assets/miri-game/balls0.png');
   const playerCharacter = COMP.playerCharacter({
     pos: { x: APP_WIDTH / 2, y: APP_HEIGHT / 2 },
     textures: { playerTexture },
+    anims: {},
   });
   gameContainer.addChild(playerCharacter.container);
 
@@ -253,7 +254,7 @@ export const gameLogic = (props: Props): GameLogic => {
   const goldContainer = new PIXI.Container();
   gameContainer.addChild(goldContainer);
 
-  gameContainer.filters = [new BloomFilter(4)];
+  //gameContainer.filters = [new BloomFilter(4)];
 
   const updateGold = (): void => {
     const maybeGold = goldSpawnerRef.spawn();

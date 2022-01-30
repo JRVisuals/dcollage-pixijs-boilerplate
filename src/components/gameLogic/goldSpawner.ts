@@ -21,7 +21,7 @@ export const goldSpawner = (): GoldSpawner => {
   };
   const initialState = { ...state };
 
-  const texture = PIXI.Texture.from('./assets/example/goldbox.png');
+  const texture = PIXI.Texture.from('./assets/miri-game/cheese.png');
 
   const nuggetBuffer = 50;
 

@@ -47,7 +47,7 @@ export const goldNugget = (props: GoldNuggetProps): GoldNugget => {
   nuggetSprite.anchor.set(0.5);
   nuggetContainer.addChild(nuggetSprite);
 
-  nuggetSprite.scale.set(50);
+  nuggetSprite.scale.set(0.5);
   nuggetSprite.alpha = 0;
 
   const spriteMargin = 20;
