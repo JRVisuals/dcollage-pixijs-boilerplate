@@ -11,6 +11,8 @@ export type VisibilityConfig = {
 };
 export interface GameLayout {
   container: PIXI.Container;
+  containerTop: PIXI.Container;
+  containerBottom: PIXI.Container;
   reset: () => void;
   update: (delta: number) => void;
   setVisibility: (config: VisibilityConfig) => void;
@@ -40,6 +42,13 @@ export const gameLayout = (props: Props): GameLayout => {
     container.removeChildren();
   };
 
+  // Background for Level
+
+  const containerBottom = new PIXI.Container();
+  container.addChild(containerBottom);
+
+  const containerTop = new PIXI.Container();
+  container.addChild(containerTop);
   // Text
 
   const promptText = new PIXI.Text(
@@ -48,8 +57,8 @@ export const gameLayout = (props: Props): GameLayout => {
   );
   promptText.anchor.set(0.5);
   promptText.position.x = APP_WIDTH / 2;
-  promptText.position.y = APP_HEIGHT - 20;
-  container.addChild(promptText);
+  promptText.position.y = APP_HEIGHT - 40;
+  containerTop.addChild(promptText);
 
   // Interactive Elements --------
 
@@ -85,5 +94,12 @@ export const gameLayout = (props: Props): GameLayout => {
     // graphicsElement.x += 5 * delta; // throttle by delta
   };
 
-  return { container, update, reset, setVisibility };
+  return {
+    container,
+    containerTop,
+    containerBottom,
+    update,
+    reset,
+    setVisibility,
+  };
 };

@@ -64,6 +64,8 @@ export const goldSpawner = (): GoldSpawner => {
   const reset = (): void => {
     console.log('gold spawner reset');
 
+    getNuggets().forEach((nug, i) => removeNuggetByIndex(i));
+
     state = { ...initialState, nuggetList: [] };
   };
   //reset();

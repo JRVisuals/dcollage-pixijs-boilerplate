@@ -277,7 +277,8 @@ const bootstrapApp = (props: {
 
   // Game Logic ----------------------------------------------
   const gameLogic = COMP.gameLogic({
-    gameContainer: screenGame.container,
+    gameContainer: screenGame.containerBottom,
+    gameContainerTop: screenGame.containerTop,
   });
 
   gameLogic.setRefs({
