@@ -51,29 +51,27 @@ export const mainMenuLayout = (props: Props): MainMenuLayout => {
   const name = (): string => 'MAIN';
 
   // Text
-  const mainTitle = new PIXI.Text('SIMPLE GAME!', TEXT_STYLE.TITLE_WHITE);
+  const mainTitle = new PIXI.Text("MIRI'S GAME", TEXT_STYLE.TITLE_WHITE);
   mainTitle.anchor.set(0.5);
   mainTitle.position.x = APP_WIDTH / 2;
   mainTitle.position.y = 40;
   container.addChild(mainTitle);
 
   const promptText = new PIXI.Text(
-    'This is a very simple game made as an example of the bare bones of what is possibe with pixi and the dcollage boilerplate.',
+    'Balls the Rat is so hungry. Help him get that stinky cheese.',
     TEXT_STYLE.GRADIENT_PROMPT
   );
   promptText.anchor.set(0.5);
   promptText.position.x = APP_WIDTH / 2;
-  promptText.position.y = 400;
+  promptText.position.y = APP_HEIGHT - 20;
   container.addChild(promptText);
 
   // Interactive Elements --------
 
   // Start Button
-  const buttonStartTexture = PIXI.Texture.from(
-    './assets/buttons/startbutton.png'
-  );
+  const buttonStartTexture = PIXI.Texture.from('./assets/miri-game/start.png');
   const buttonStartTexturePressed = PIXI.Texture.from(
-    './assets/buttons/startbutton_pressed.png'
+    './assets/miri-game/start.png'
   );
 
   const showPressedButton = (): void => {
@@ -81,7 +79,7 @@ export const mainMenuLayout = (props: Props): MainMenuLayout => {
   };
 
   const buttonStart = COMP.LIB.btnSimple({
-    pos: { x: APP_WIDTH / 2, y: APP_HEIGHT / 2 },
+    pos: { x: APP_WIDTH / 2, y: APP_HEIGHT / 2 + 10 },
     buttonTexture: buttonStartTexture,
     onPress: () => {
       showPressedButton();

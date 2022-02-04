@@ -20,6 +20,7 @@ import {
   Z_MC_UI,
   SFX_VOL_MULT,
   PLAYER_CONTINOUS_MOVEMENT,
+  MUSIC_VOL_MULT,
 } from './constants';
 import './index.scss';
 
@@ -58,7 +59,7 @@ const pixiConfig: PixiConfig = {
   resolution: window.devicePixelRatio || 1, // use resolution: >1 to scale up
 };
 // No anti-alias - Uncomment for pixel art
-PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+//PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
 /**
  * @function bootstrapApp
@@ -88,11 +89,11 @@ const bootstrapApp = (props: {
   const { pixiApp, mainContainer } = initPIXI(pixiConfig, hostDiv);
 
   const crtFilter = new CRTFilter({
-    curvature: 2,
-    vignetting: 0.2,
+    curvature: 3,
+    vignetting: 0.3,
     noise: 0.1,
   });
-  //mainContainer.filters = [crtFilter];
+  mainContainer.filters = [crtFilter];
 
   // Get our preloader assets
   let { spriteSheets } = props;
@@ -143,6 +144,11 @@ const bootstrapApp = (props: {
   // Load these up on startup...
   pixiSound.add('good', './assets/example/good.mp3');
   pixiSound.add('coin', './assets/example/coin.wav');
+  pixiSound.add('chom0', './assets/miri-game/chom0.wav');
+  pixiSound.add('chom1', './assets/miri-game/chom1.wav');
+  pixiSound.add('chom2', './assets/miri-game/chom2.wav');
+  pixiSound.add('burp', './assets/miri-game/burp.wav');
+  pixiSound.add('lose', './assets/miri-game/ballstune-lose.wav');
 
   // Create empty BASE and UI containers and add them to the mainContainer
   // Use constants for Z-index of these containers
@@ -154,7 +160,7 @@ const bootstrapApp = (props: {
   baseContainer.name = 'gameContainer';
   uiContainer.name = 'uiContainer';
 
-  const bgTexture = PIXI.Texture.from('./assets/example/background600x600.png');
+  const bgTexture = PIXI.Texture.from('./assets/miri-game/dirtytiles.png');
   const bgSprite = new PIXI.Sprite(bgTexture);
   baseContainer.addChild(bgSprite);
 
@@ -164,6 +170,9 @@ const bootstrapApp = (props: {
     audioLayer = COMP.LIB.audio(sounds);
     // Play a track
     //audioLayer.music.playRandomTrack();
+    audioLayer.music.menuTheme(true);
+
+    gameLogic.setRefs({ audioLayer });
   };
 
   // Personal Best Score Display
@@ -297,7 +306,7 @@ const bootstrapApp = (props: {
         gameLogic.onStartGame();
       },
     });
-    audioLayer.music.mainTheme();
+    audioLayer.music.gameTheme(true);
     //
     //
   };
@@ -377,6 +386,7 @@ const onSecondaryAssetsLoaded = (): void => {
   };
   const sounds: Sounds = {
     MainTheme: PIXI.Loader.shared.resources['MainTheme'] as any,
+    GameTheme: PIXI.Loader.shared.resources['GameTheme'] as any,
   };
   window.APP.coreInterface.setSounds(sounds);
   window.APP.coreInterface.setAdditionalSprites(additionalSprites);

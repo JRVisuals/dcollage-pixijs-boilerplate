@@ -8,6 +8,7 @@ import * as PIXI from 'pixi.js';
 import { GoldNugget, goldNugget } from '../goldNugget';
 
 export interface GoldSpawner {
+  initAnimations: (anims?: { [key: string]: Array<PIXI.Texture> }) => void;
   spawn: () => GoldNugget | null;
   getNuggets: () => GoldNugget[];
   removeNuggetByIndex: (index: number) => void;
@@ -20,7 +21,7 @@ export const goldSpawner = (): GoldSpawner => {
     nuggetList: [],
   };
   const initialState = { ...state };
-
+  let animsRef;
   const texture = PIXI.Texture.from('./assets/miri-game/cheese.png');
 
   const nuggetBuffer = 50;
@@ -40,11 +41,17 @@ export const goldSpawner = (): GoldSpawner => {
     const nugget = goldNugget({
       pos: { x: rX, y: rY },
       textures: { nuggetTexture: texture },
+      anims: animsRef,
     });
 
     state.nuggetList.push(nugget);
 
     return nugget;
+  };
+
+  const initAnimations = (anims): void => {
+    console.log('spanwer initAnimations', anims);
+    animsRef = anims;
   };
 
   const getNuggets = (): GoldNugget[] => state.nuggetList;
@@ -62,6 +69,7 @@ export const goldSpawner = (): GoldSpawner => {
   //reset();
 
   return {
+    initAnimations,
     spawn,
     getNuggets,
     removeNuggetByIndex,

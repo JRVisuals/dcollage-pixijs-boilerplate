@@ -9,11 +9,11 @@ import { getAppVerShort } from '@src/util/appVer';
 
 export interface Sounds {
   MainTheme: PIXI.LoaderResource;
-  //Track2: PIXI.LoaderResource;
+  GameTheme: PIXI.LoaderResource;
 }
 export interface AudioLayer {
   music: {
-    mainTheme: (isPlay: boolean) => void;
+    gameTheme: (isPlay: boolean) => void;
     menuTheme: (isPlay: boolean) => void;
     playRandomTrack: () => void;
     playTracklist: () => void;
@@ -35,10 +35,10 @@ export const audio = (sounds: Sounds): AudioLayer => {
   // Main Music Track
   const audio = PIXISOUND.default;
   audio.add('MainTheme', sounds.MainTheme as any);
-  //audio.add('Track2', sounds.Track2);
+  audio.add('GameTheme', sounds.GameTheme as any);
 
   const trackList = [
-    'MainTheme',
+    'ç',
     //'Track2',
   ];
   let currentTrack = 0;
@@ -76,11 +76,16 @@ export const audio = (sounds: Sounds): AudioLayer => {
   // Called when we've got all the things...
   const stopAllThemes = (): void => {
     audio.stop('MainTheme');
+    audio.stop('GameTheme');
     // audio.stop('Track2');
   };
   const mainTheme = (isPlay): void => {
     stopAllThemes();
-    if (isPlay) audio.play('MainTheme', { loop: true, volume: mainVolume() });
+    if (isPlay) audio.play('GameTheme', { loop: true, volume: mainVolume() });
+  };
+  const gameTheme = (isPlay): void => {
+    stopAllThemes();
+    if (isPlay) audio.play('GameTheme', { loop: true, volume: mainVolume() });
   };
   const menuTheme = (isPlay): void => {
     stopAllThemes();
@@ -132,7 +137,7 @@ export const audio = (sounds: Sounds): AudioLayer => {
   };
 
   return {
-    music: { mainTheme, menuTheme, playTracklist, playRandomTrack },
+    music: { gameTheme, menuTheme, playTracklist, playRandomTrack },
     muteToggle,
     getMutedState,
   };

@@ -43,10 +43,14 @@ export const goldNugget = (props: GoldNuggetProps): GoldNugget => {
   // playerContainer.addChild(playerSprite);
 
   // placeholder sprite
-  const nuggetSprite = new PIXI.Sprite(textures.nuggetTexture);
+  //const nuggetSprite = new PIXI.Sprite(textures.nuggetTexture);
+
+  // animated sprite
+  const nuggetSprite = new PIXI.AnimatedSprite(anims['cheese']);
   nuggetSprite.anchor.set(0.5);
   nuggetContainer.addChild(nuggetSprite);
-
+  nuggetSprite.animationSpeed = 0.2;
+  nuggetSprite.play();
   nuggetSprite.scale.set(0.5);
   nuggetSprite.alpha = 0;
 
@@ -56,7 +60,7 @@ export const goldNugget = (props: GoldNuggetProps): GoldNugget => {
     gsap.killTweensOf(nuggetSprite);
     const myTween = gsap.to(nuggetSprite, {
       duration: 0.35,
-      pixi: { scale: 1 },
+      pixi: { scale: 1.5 },
       ease: Bounce.easeOut,
     });
 

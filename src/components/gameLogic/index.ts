@@ -11,6 +11,7 @@ import {
   START_LEVEL,
   PLAYER_CONTINOUS_MOVEMENT,
   IS_SCORE_INCREMENTY,
+  MUSIC_VOL_MULT,
 } from '@src/constants';
 import * as COMP from '..';
 import { PlayerCharacter } from '../playerCharacter';
@@ -18,14 +19,16 @@ import { RunTime } from '../library/runtime';
 import { Spritesheets } from '@src/core';
 import { scoreDisplay, ScoreDisplay } from '../library/scoreDisplay';
 import { goldSpawner } from './goldSpawner';
+import { burpDrop } from '../burpDrop';
 
 type Refs = {
   scoreDisplay?: ScoreDisplay;
-  spriteSheets: Spritesheets;
+  spriteSheets?: Spritesheets;
   playerCharacter?: PlayerCharacter;
   uiContainer?: PIXI.Container;
   mainOnAudioCycleOptions?: () => void;
   mainOnGameOver?: () => void;
+  audioLayer?: any;
 };
 
 export interface GameLogic {
@@ -73,6 +76,7 @@ export const gameLogic = (props: Props): GameLogic => {
   let scoreDisplay: ScoreDisplay = null;
   let spriteSheetsRef: Spritesheets = null;
   let uiContainerRef: PIXI.Container;
+  let audioLayerRef: any;
   let runtime: RunTime = null;
   let mainOnGameOver: () => void = null;
   let mainOnAudioCycleOptions: () => void = null;
@@ -107,7 +111,7 @@ export const gameLogic = (props: Props): GameLogic => {
     if (refs.mainOnGameOver) mainOnGameOver = refs.mainOnGameOver;
     if (refs.mainOnAudioCycleOptions)
       mainOnAudioCycleOptions = refs.mainOnAudioCycleOptions;
-
+    if (refs.audioLayer) audioLayerRef = refs.audioLayer;
     // Run Time is a simple clock that runs up
     runtime = COMP.LIB.runtime({
       pos: { x: 25, y: 25 },
@@ -122,6 +126,10 @@ export const gameLogic = (props: Props): GameLogic => {
       pos: { x: APP_WIDTH - 100, y: 25 },
     });
     uiContainerRef.addChild(scoreDisplay.container);
+
+    // Player Animations now that we have spritesheet ref
+    playerCharacter.initAnimations(spriteSheetsRef.main.animations); // <-- example anims are pulled from `.main` but will usually be in `.game`
+    goldSpawnerRef.initAnimations(spriteSheetsRef.main.animations);
   };
 
   const getIsGameOver = (): boolean => {
@@ -197,7 +205,8 @@ export const gameLogic = (props: Props): GameLogic => {
 
     // Clean Up Game Logic Remaining
     //...anything within game logic component...
-
+    audioLayerRef.music.menuTheme(true);
+    pixiSound.play('lose', { volume: 1.0 * MUSIC_VOL_MULT });
     playerCharacter.wither(mainOnGameOver);
   };
 
@@ -222,10 +231,19 @@ export const gameLogic = (props: Props): GameLogic => {
       return;
     }
     // Single cardinal directions
+
     keysDown['KeyW'] && playerCharacter.moveUp();
     keysDown['KeyS'] && playerCharacter.moveDown();
     keysDown['KeyA'] && playerCharacter.moveLeft();
     keysDown['KeyD'] && playerCharacter.moveRight();
+
+    if (
+      !keysDown['KeyW'] &&
+      keysDown['KeyS'] &&
+      keysDown['KeyA'] &&
+      keysDown['KeyD']
+    )
+      playerCharacter.moveStop();
   };
 
   const addOnKeyUp = (): void => {
@@ -240,21 +258,29 @@ export const gameLogic = (props: Props): GameLogic => {
   const removeOnKeyDown = (): void =>
     window.removeEventListener('keydown', onKeyDownGame);
 
-  // Simple Player Component
-  const playerTexture = PIXI.Texture.from('./assets/miri-game/balls0.png');
-  const playerCharacter = COMP.playerCharacter({
-    pos: { x: APP_WIDTH / 2, y: APP_HEIGHT / 2 },
-    textures: { playerTexture },
-    anims: {},
-  });
-  gameContainer.addChild(playerCharacter.container);
+  // Blood trail
+  const bloodContainer = new PIXI.Container();
+  gameContainer.addChild(bloodContainer);
 
   // Gold Spawner
   const goldSpawnerRef = goldSpawner();
   const goldContainer = new PIXI.Container();
   gameContainer.addChild(goldContainer);
 
+  // Simple Player Component
+
+  const playerCharacter = COMP.playerCharacter({
+    pos: { x: APP_WIDTH / 2, y: APP_HEIGHT / 2 },
+
+    bloodContainer,
+  });
+  gameContainer.addChild(playerCharacter.container);
+
   //gameContainer.filters = [new BloomFilter(4)];
+
+  // Burp trail
+  const burpContainer = new PIXI.Container();
+  gameContainer.addChild(burpContainer);
 
   const updateGold = (): void => {
     const maybeGold = goldSpawnerRef.spawn();
@@ -284,14 +310,34 @@ export const gameLogic = (props: Props): GameLogic => {
         pX < nX + hitBox &&
         pY > nY - hitBox &&
         pY < nY + hitBox;
-      collided && goldSpawnerRef.removeNuggetByIndex(i);
-      collided && goldContainer.removeChildAt(i);
-      collided && playerCharacter.grow();
-      collided && scoreDisplay.addToScore(POINTS_GOLD);
-      collided &&
-        pixiSound.play('coin', {
+
+      //  collided && playerCharacter.grow();
+
+      if (collided) {
+        collided && goldSpawnerRef.removeNuggetByIndex(i);
+        collided && goldContainer.removeChildAt(i);
+        scoreDisplay.addToScore(POINTS_GOLD);
+        const rsnd = `chom${Math.round(Math.random() * 2)}`;
+        pixiSound.play(rsnd, {
           volume: 1 * SFX_VOL_MULT,
         });
+
+        if (Math.random() > 0.75) {
+          setTimeout(() => {
+            pixiSound.play('burp', { volume: 0.5 * SFX_VOL_MULT });
+            burpContainer.addChild(
+              burpDrop({
+                pos: {
+                  x: playerCharacter.container.x,
+                  y: playerCharacter.container.y - 20,
+                },
+              }).container
+            );
+          }, 750);
+        }
+
+        collided && runtime.setLimit(runtime.getLimit() + 1);
+      }
     });
   };
 
@@ -305,7 +351,7 @@ export const gameLogic = (props: Props): GameLogic => {
     runtime.update(delta);
     checkDownKeys(state.keysDown);
     updateGold();
-    playerCharacter.update(delta);
+    playerCharacter.update(delta, state.keysDown);
     checkCollision();
     IS_SCORE_INCREMENTY && scoreDisplay.update(delta);
     updateRan = true;

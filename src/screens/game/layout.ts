@@ -43,7 +43,7 @@ export const gameLayout = (props: Props): GameLayout => {
   // Text
 
   const promptText = new PIXI.Text(
-    'Use W, A, S, D to move your character. Eat and grow.',
+    'Use W, A, S, D to move Balls the rat. Get that stinky cheese.',
     TEXT_STYLE.GRADIENT_PROMPT
   );
   promptText.anchor.set(0.5);
