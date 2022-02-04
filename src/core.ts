@@ -31,7 +31,6 @@ import {
   personalBestScores,
   PersonalBestScores,
 } from './util/personalBestScore';
-import { runtime } from './components/library';
 
 declare global {
   interface Window {

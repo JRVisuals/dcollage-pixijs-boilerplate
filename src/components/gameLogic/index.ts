@@ -107,25 +107,29 @@ export const gameLogic = (props: Props): GameLogic => {
   // References of components created in core are set here
   const setRefs = (refs: Refs): void => {
     if (refs.spriteSheets) spriteSheetsRef = refs.spriteSheets;
-    if (refs.uiContainer) uiContainerRef = refs.uiContainer;
+
     if (refs.mainOnGameOver) mainOnGameOver = refs.mainOnGameOver;
     if (refs.mainOnAudioCycleOptions)
       mainOnAudioCycleOptions = refs.mainOnAudioCycleOptions;
     if (refs.audioLayer) audioLayerRef = refs.audioLayer;
-    // Run Time is a simple clock that runs up
-    runtime = COMP.LIB.runtime({
-      pos: { x: 25, y: 25 },
-      timeOverCallback: () => {
-        onTimeOver();
-      },
-    });
-    uiContainerRef.addChild(runtime.container);
 
-    // Score Display
-    scoreDisplay = COMP.LIB.scoreDisplay({
-      pos: { x: APP_WIDTH - 100, y: 25 },
-    });
-    uiContainerRef.addChild(scoreDisplay.container);
+    if (refs.uiContainer) {
+      uiContainerRef = refs.uiContainer;
+      // Run Time is a simple clock that runs up
+      runtime = COMP.LIB.runtime({
+        pos: { x: 25, y: 25 },
+        timeOverCallback: () => {
+          onTimeOver();
+        },
+      });
+      uiContainerRef.addChild(runtime.container);
+
+      // Score Display
+      scoreDisplay = COMP.LIB.scoreDisplay({
+        pos: { x: APP_WIDTH - 100, y: 25 },
+      });
+      uiContainerRef.addChild(scoreDisplay.container);
+    }
 
     // Player Animations now that we have spritesheet ref
     playerCharacter.initAnimations(spriteSheetsRef.main.animations); // <-- example anims are pulled from `.main` but will usually be in `.game`
