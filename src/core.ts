@@ -55,7 +55,7 @@ const pixiConfig: PixiConfig = {
   height: hostHeight,
   backgroundColor: APP_BGCOLOR,
   antialias: false,
-  resolution: window.devicePixelRatio || 1, // use resolution: >1 to scale up
+  resolution: 1, // use resolution: >1 to scale up
 };
 // No anti-alias - Uncomment for pixel art
 // PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
