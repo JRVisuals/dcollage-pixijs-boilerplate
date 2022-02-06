@@ -51,7 +51,7 @@ export const mainMenuLayout = (props: Props): MainMenuLayout => {
   const name = (): string => 'MAIN';
 
   // Text
-  const mainTitle = new PIXI.Text("MIRI'S GAME", TEXT_STYLE.TITLE_WHITE);
+  const mainTitle = new PIXI.Text('BALLS THE RAT', TEXT_STYLE.TITLE_WHITE);
   mainTitle.anchor.set(0.5);
   mainTitle.position.x = APP_WIDTH / 2;
   mainTitle.position.y = 40;
