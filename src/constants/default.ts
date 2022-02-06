@@ -23,8 +23,7 @@ export const Z_MC_BASE = 0;
 export const MUSIC_VOL_MULT = 0.5;
 export const SFX_VOL_MULT = 0.5;
 
-// Loader
-// Assets
+// Loader Assets ---------------
 export const PRELOAD_ARRAY = [
   { name: 'main', url: './assets/example/sprites.json' },
   { name: 'ui', url: './assets/example/sprites-ui.json' },
