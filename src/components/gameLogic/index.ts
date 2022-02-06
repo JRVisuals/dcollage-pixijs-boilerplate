@@ -110,6 +110,9 @@ export const gameLogic = (props: Props): GameLogic => {
       [ 5 ] 
 
   */
+
+  const roomContainer = gameContainer.addChild(new PIXI.Container());
+
   // Level Message Text
   const messageText = new PIXI.BitmapText('LEVEL UP!', {
     fontName: 'Atari-32',
@@ -269,6 +272,7 @@ export const gameLogic = (props: Props): GameLogic => {
     cleanUpGold();
     goldSpawnerRef.reset();
     burpContainer.removeChildren();
+    roomContainer.removeChildren();
 
     const room = map[state.currentRoom];
 
@@ -276,31 +280,31 @@ export const gameLogic = (props: Props): GameLogic => {
       './assets/miri-game/dirtytileshaded.png'
     );
     const bgSprite = new PIXI.Sprite(bgTexture);
-    gameContainer.addChildAt(bgSprite, 0);
+    roomContainer.addChildAt(bgSprite, 0);
 
     const nWallTexture = PIXI.Texture.from(
       `./assets/miri-game/nWall${room.n > -1 ? 1 : 0}.png`
     );
     const nWall = new PIXI.Sprite(nWallTexture);
-    gameContainer.addChild(nWall);
+    roomContainer.addChild(nWall);
 
     const sWallTexture = PIXI.Texture.from(
       `./assets/miri-game/sWall${room.s > -1 ? 1 : 0}.png`
     );
     const sWall = new PIXI.Sprite(sWallTexture);
-    gameContainer.addChild(sWall);
+    roomContainer.addChild(sWall);
 
     const eWallTexture = PIXI.Texture.from(
       `./assets/miri-game/eWall${room.e > -1 ? 1 : 0}.png`
     );
     const eWall = new PIXI.Sprite(eWallTexture);
-    gameContainer.addChild(eWall);
+    roomContainer.addChild(eWall);
 
     const wWallTexture = PIXI.Texture.from(
       `./assets/miri-game/wWall${room.w > -1 ? 1 : 0}.png`
     );
     const wWall = new PIXI.Sprite(wWallTexture);
-    gameContainer.addChild(wWall);
+    roomContainer.addChild(wWall);
 
     roomTransitionFinish(dir);
   };
@@ -358,6 +362,8 @@ export const gameLogic = (props: Props): GameLogic => {
     runtime.start();
     playerCharacter.reset();
     //
+    state.currentLevel = 0;
+    state.currentRoom = 1;
     roomTransition('ew');
 
     // Start listening for keyboard events
