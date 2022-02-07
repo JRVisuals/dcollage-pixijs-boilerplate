@@ -10,6 +10,8 @@ import {
 } from '@src/constants';
 import { bloodDrop } from '../bloodDrop';
 
+import * as Movement from './movement';
+
 export interface PlayerCharacter {
   container: PIXI.Container;
   initAnimations: (anims?: { [key: string]: Array<PIXI.Texture> }) => void;
@@ -30,23 +32,6 @@ interface PlayerCharacterProps {
   textures?: { playerTexture: PIXI.Texture };
   anims?: { [key: string]: Array<PIXI.Texture> };
   bloodContainer: PIXI.Container;
-}
-
-type PlayerPosition = { x: number; y: number };
-
-enum PLAYER_DIRECTION {
-  NONE,
-  UP,
-  DOWN,
-  LEFT,
-  RIGHT,
-}
-enum PLAYER_MOVEMENT {
-  IDLE = 'balls',
-  WALK_UP = 'walk_up',
-  WALK_DOWN = 'walk_down',
-  WALK_LEFT = 'walk_left',
-  WALK_RIGHT = 'walk_right',
 }
 
 /**
@@ -76,8 +61,8 @@ export const playerCharacter = (
   let state = {
     startPos: { ...pos },
     status: OBJECT_STATUS.ACTIVE,
-    direction: PLAYER_DIRECTION.NONE,
-    movement: PLAYER_MOVEMENT.IDLE,
+    direction: Movement.PLAYER_DIRECTION.NONE,
+    movement: Movement.PLAYER_MOVEMENT.IDLE,
     movementSpeed: PLAYER_SPEED,
     size: 1,
     bloodContainer: props.bloodContainer,
@@ -87,116 +72,50 @@ export const playerCharacter = (
   const playerContainer = new PIXI.Container();
   container.addChild(playerContainer);
 
-  const spriteMargin = 20;
-
   //
   const initAnimations = (anims): void => {
     // animated sprite
-    playerSprite = new PIXI.AnimatedSprite(anims[PLAYER_MOVEMENT.IDLE]);
+    playerSprite = new PIXI.AnimatedSprite(
+      anims[Movement.PLAYER_MOVEMENT.IDLE]
+    );
     playerContainer.addChild(playerSprite);
     playerSprite.animationSpeed = 0.15;
     playerSprite.alpha = 0;
     playerSprite.anchor.set(0.5);
   };
-  //
-  const calculateMove = (
-    currentPos: PlayerPosition,
-    keysDown: {},
-    delta: number
-  ): PlayerPosition => {
-    let newPos = {
-      x: currentPos.x,
-      y: currentPos.y,
-    };
 
-    if (keysDown['KeyW'])
-      newPos = {
-        x: newPos.x,
-        y: newPos.y - state.movementSpeed * delta,
-      };
-
-    if (keysDown['KeyS'])
-      newPos = {
-        x: newPos.x,
-        y: newPos.y + state.movementSpeed * delta,
-      };
-    if (keysDown['KeyA'])
-      newPos = {
-        x: newPos.x - state.movementSpeed * delta,
-        y: newPos.y,
-      };
-    if (keysDown['KeyD'])
-      newPos = {
-        x: newPos.x + state.movementSpeed * delta,
-        y: newPos.y,
-      };
-
-    if (currentPos === newPos) {
-      playerSprite.stop();
-    } else {
-      playerSprite.play();
-      if (Math.random() > 0.85) {
-        state.bloodContainer.addChild(
-          bloodDrop({ pos: { x: currentPos.x + 32, y: currentPos.y + 64 } })
-            .container
-        );
-      }
-    }
-
-    return newPos;
-  };
-  //
-  const checkInBounds = (pos: PlayerPosition): boolean =>
-    pos.x < APP_WIDTH - spriteMargin &&
-    pos.x > spriteMargin &&
-    pos.y < APP_HEIGHT - spriteMargin &&
-    pos.y > spriteMargin;
-  //
-  const setDirection = (val: PLAYER_DIRECTION): void => {
-    state.direction = val;
-  };
-  //
-  const setMovement = (val: PLAYER_MOVEMENT): void => {
-    state.movement = val;
-  };
-  //
-  const moveUpdate = (delta: number, keysDown: {}): PlayerPosition => {
-    const currentPos = { x: container.x, y: container.y };
-
-    if (state.movement === PLAYER_MOVEMENT.IDLE || state.movementSpeed === 0)
-      return currentPos;
-
-    const nextPost = calculateMove(currentPos, keysDown, delta);
-    const newPos = checkInBounds(nextPost) ? nextPost : currentPos;
-
-    return newPos;
-  };
-  //
   const updateContainer = (delta: number, keysDown: {}): void => {
-    const newPos = moveUpdate(delta, keysDown);
+    const newPos = Movement.moveUpdate(
+      state,
+      playerSprite,
+      container,
+      keysDown,
+      bloodDrop,
+      delta
+    );
     container.x = newPos.x;
     container.y = newPos.y;
   };
 
   const moveStop = (): void => {
     playerSprite.stop();
-    setMovement(PLAYER_MOVEMENT.IDLE);
+    Movement.setMovement(state, Movement.PLAYER_MOVEMENT.IDLE);
   };
   const moveUp = (): void => {
-    setDirection(PLAYER_DIRECTION.UP);
-    setMovement(PLAYER_MOVEMENT.WALK_UP);
+    Movement.setDirection(state, Movement.PLAYER_DIRECTION.UP);
+    Movement.setMovement(state, Movement.PLAYER_MOVEMENT.WALK_UP);
   };
   const moveDown = (): void => {
-    setDirection(PLAYER_DIRECTION.DOWN);
-    setMovement(PLAYER_MOVEMENT.WALK_DOWN);
+    Movement.setDirection(state, Movement.PLAYER_DIRECTION.DOWN);
+    Movement.setMovement(state, Movement.PLAYER_MOVEMENT.WALK_DOWN);
   };
   const moveLeft = (): void => {
-    setDirection(PLAYER_DIRECTION.LEFT);
-    setMovement(PLAYER_MOVEMENT.WALK_LEFT);
+    Movement.setDirection(state, Movement.PLAYER_DIRECTION.LEFT);
+    Movement.setMovement(state, Movement.PLAYER_MOVEMENT.WALK_LEFT);
   };
   const moveRight = (): void => {
-    setDirection(PLAYER_DIRECTION.RIGHT);
-    setMovement(PLAYER_MOVEMENT.WALK_RIGHT);
+    Movement.setDirection(state, Movement.PLAYER_DIRECTION.RIGHT);
+    Movement.setMovement(state, Movement.PLAYER_MOVEMENT.WALK_RIGHT);
   };
 
   const getSize = (): number => state.size;

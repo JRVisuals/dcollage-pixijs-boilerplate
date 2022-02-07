@@ -29,6 +29,7 @@ export const IS_SCORE_INCREMENTY = true;
 // Player
 export const PLAYER_SPEED = 5;
 export const PLAYER_CONTINOUS_MOVEMENT = false;
+export const SPRITE_MARGIN = 20;
 
 // Gold
 export const POINTS_GOLD = 100;

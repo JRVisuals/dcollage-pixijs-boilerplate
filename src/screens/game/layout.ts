@@ -51,14 +51,14 @@ export const gameLayout = (props: Props): GameLayout => {
   container.addChild(containerTop);
   // Text
 
-  const promptText = new PIXI.Text(
-    'Use W, A, S, D to move Balls the rat. Get that stinky cheese.',
-    TEXT_STYLE.GRADIENT_PROMPT
-  );
-  promptText.anchor.set(0.5);
-  promptText.position.x = APP_WIDTH / 2;
-  promptText.position.y = APP_HEIGHT - 40;
-  containerTop.addChild(promptText);
+  // const promptText = new PIXI.Text(
+  //   'Use W, A, S, D to move Balls the Rat. Get that stinky cheese.',
+  //   TEXT_STYLE.GRADIENT_PROMPT
+  // );
+  // promptText.anchor.set(0.5);
+  // promptText.position.x = APP_WIDTH / 2;
+  // promptText.position.y = APP_HEIGHT - 40;
+  // containerTop.addChild(promptText);
 
   // Interactive Elements --------
 

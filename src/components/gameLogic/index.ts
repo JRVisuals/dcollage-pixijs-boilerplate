@@ -12,6 +12,10 @@ import {
   PLAYER_CONTINOUS_MOVEMENT,
   IS_SCORE_INCREMENTY,
   MUSIC_VOL_MULT,
+  MAP_DATA,
+  SPRITE_MARGIN,
+  ROOM_ITEM_TYPES,
+  TEXT_STYLE,
 } from '@src/constants';
 import * as COMP from '..';
 import { PlayerCharacter } from '../playerCharacter';
@@ -20,6 +24,7 @@ import { Spritesheets } from '@src/core';
 import { scoreDisplay, ScoreDisplay } from '../library/scoreDisplay';
 import { goldSpawner } from './goldSpawner';
 import { burpDrop } from '../burpDrop';
+import * as Rooms from './rooms';
 
 type Refs = {
   scoreDisplay?: ScoreDisplay;
@@ -84,32 +89,6 @@ export const gameLogic = (props: Props): GameLogic => {
   let mainOnAudioCycleOptions: () => void = null;
 
   const { gameContainer, gameContainerTop } = props;
-
-  // Temp Level Data
-  const map = [
-    { n: -1, s: -1, e: 1, w: -1 }, // 0
-    { n: -1, s: 2, e: -1, w: 0 }, // 1
-    { n: 1, s: -1, e: -1, w: 3 }, // 2
-    { n: -1, s: 4, e: 2, w: -1 }, // 3
-    { n: 3, s: 5, e: -1, w: -1 }, // 4
-    { n: 4, s: -1, e: -1, w: -1 }, // 5
-  ];
-
-  /*
-    
-      N
-   W< ^ >E
-      S
-    
-      [ 0 ] <-> [ 1*]
-                  |    
-      [ 3 ] <-> [ 2 ]
-        |      
-      [ 4 ]
-        |      
-      [ 5 ] 
-
-  */
 
   const roomContainer = gameContainer.addChild(new PIXI.Container());
 
@@ -198,158 +177,6 @@ export const gameLogic = (props: Props): GameLogic => {
     return state.isGamePaused;
   };
 
-  const roomTransition = (dir): void => {
-    playerCharacter.container.alpha = 0;
-    gsap.killTweensOf(transitionSprite);
-
-    let from;
-    let to;
-    switch (dir) {
-      case 'ew':
-        transitionSprite.angle = 0;
-        from = { x: 1200, y: 0 };
-        to = { x: -300 };
-        break;
-      case 'we':
-        transitionSprite.angle = 0;
-        from = { x: -1200, y: 0 };
-        to = { x: -300 };
-        break;
-      case 'ns':
-        transitionSprite.angle = 90;
-        from = { x: 600, y: -1200 };
-        to = { y: -300 };
-        break;
-      case 'sn':
-        transitionSprite.angle = 90;
-        from = { x: 600, y: 1200 };
-        to = { y: -300 };
-        break;
-    }
-
-    transitionSprite.x = from.x;
-    transitionSprite.y = from.y;
-
-    gsap.to(transitionSprite, {
-      duration: 0.1,
-      pixi: to,
-      ease: Power0.easeOut,
-      onComplete: () => renderRoom(dir),
-    });
-  };
-
-  const roomTransitionFinish = (dir): void => {
-    playerCharacter.container.alpha = 1;
-    gsap.killTweensOf(transitionSprite);
-
-    let to;
-    switch (dir) {
-      case 'ew':
-        to = { x: -1200 };
-        break;
-      case 'we':
-        to = { x: 1200 };
-        break;
-      case 'ns':
-        to = { y: 1200 };
-        break;
-      case 'sn':
-        to = { y: -1200 };
-        break;
-    }
-
-    gsap.to(transitionSprite, {
-      delay: 0.25,
-      duration: 0.25,
-      pixi: to,
-      ease: Power0.easeIn,
-    });
-  };
-
-  const renderRoom = (dir): void => {
-    // Cleanup last room
-    bloodContainer.removeChildren();
-    cleanUpGold();
-    goldSpawnerRef.reset();
-    burpContainer.removeChildren();
-    roomContainer.removeChildren();
-
-    const room = map[state.currentRoom];
-
-    const bgTexture = PIXI.Texture.from(
-      './assets/miri-game/dirtytileshaded.png'
-    );
-    const bgSprite = new PIXI.Sprite(bgTexture);
-    roomContainer.addChildAt(bgSprite, 0);
-
-    const nWallTexture = PIXI.Texture.from(
-      `./assets/miri-game/nWall${room.n > -1 ? 1 : 0}.png`
-    );
-    const nWall = new PIXI.Sprite(nWallTexture);
-    roomContainer.addChild(nWall);
-
-    const sWallTexture = PIXI.Texture.from(
-      `./assets/miri-game/sWall${room.s > -1 ? 1 : 0}.png`
-    );
-    const sWall = new PIXI.Sprite(sWallTexture);
-    roomContainer.addChild(sWall);
-
-    const eWallTexture = PIXI.Texture.from(
-      `./assets/miri-game/eWall${room.e > -1 ? 1 : 0}.png`
-    );
-    const eWall = new PIXI.Sprite(eWallTexture);
-    roomContainer.addChild(eWall);
-
-    const wWallTexture = PIXI.Texture.from(
-      `./assets/miri-game/wWall${room.w > -1 ? 1 : 0}.png`
-    );
-    const wWall = new PIXI.Sprite(wWallTexture);
-    roomContainer.addChild(wWall);
-
-    roomTransitionFinish(dir);
-  };
-
-  const checkExit = (): void => {
-    const pX = playerCharacter.container.x;
-    const pY = playerCharacter.container.y;
-
-    // Exit North
-    const exitN = map[state.currentRoom].n;
-    if (pY < 50 && pX > 250 && pX < 350 && map[state.currentRoom].n > -1) {
-      state.currentRoom = exitN;
-      roomTransition('sn');
-      playerCharacter.container.y = 550;
-      return;
-    }
-
-    // Exit South
-    const exitS = map[state.currentRoom].s;
-    if (pY > 550 && pX > 250 && pX < 350 && map[state.currentRoom].s > -1) {
-      state.currentRoom = exitS;
-      roomTransition('ns');
-      playerCharacter.container.y = 50;
-      return;
-    }
-
-    // Exit East
-    const exitE = map[state.currentRoom].e;
-    if (pX > 550 && pY > 250 && pY < 350 && map[state.currentRoom].e > -1) {
-      state.currentRoom = exitE;
-      roomTransition('we');
-      playerCharacter.container.x = 50;
-      return;
-    }
-
-    // Exit West
-    const exitW = map[state.currentRoom].w;
-    if (pX < 50 && pY > 250 && pY < 350 && exitW > -1) {
-      state.currentRoom = exitW;
-      roomTransition('ew');
-      playerCharacter.container.x = 550;
-      return;
-    }
-  };
-
   const onStartGame = (): void => {
     console.log('gameLogic: onStartGame');
     //
@@ -364,7 +191,20 @@ export const gameLogic = (props: Props): GameLogic => {
     //
     state.currentLevel = 0;
     state.currentRoom = 1;
-    roomTransition('ew');
+    Rooms.roomTransition(
+      state,
+      {
+        itemContainer,
+        transitionSprite,
+        playerCharacter,
+        bloodContainer,
+        goldSpawnerRef,
+        burpContainer,
+        roomContainer,
+        cleanUpGold,
+      },
+      'ew'
+    );
 
     // Start listening for keyboard events
     addOnKeyUp();
@@ -451,6 +291,10 @@ export const gameLogic = (props: Props): GameLogic => {
   const bloodContainer = new PIXI.Container();
   gameContainerTop.addChild(bloodContainer);
 
+  // Item Container (keeps items in rooms above the blood)
+  const itemContainer = new PIXI.Container();
+  gameContainerTop.addChild(itemContainer);
+
   // Gold Spawner
   const goldSpawnerRef = goldSpawner();
   const goldContainer = new PIXI.Container();
@@ -460,7 +304,6 @@ export const gameLogic = (props: Props): GameLogic => {
 
   const playerCharacter = COMP.playerCharacter({
     pos: { x: APP_WIDTH / 2, y: APP_HEIGHT / 2 },
-
     bloodContainer,
   });
   gameContainerTop.addChild(playerCharacter.container);
@@ -488,32 +331,98 @@ export const gameLogic = (props: Props): GameLogic => {
     goldContainer.removeChildren();
   };
 
-  // Collision Detection
+  // Signage
+  const signContainer = new PIXI.Container();
+  signContainer.alpha = 0;
+  gameContainerTop.addChild(signContainer);
+  const signBackTexture = PIXI.Texture.from(
+    './assets/miri-game/textWindow-small.png'
+  );
+  const signBackSprite = new PIXI.Sprite(signBackTexture);
+  signContainer.addChild(signBackSprite);
+  signBackSprite.x = 300;
+  signBackSprite.y = 300;
+  signBackSprite.anchor.set(0.5);
+  const signTextTitle = new PIXI.Text('', TEXT_STYLE.SIGN_TITLE);
+  signTextTitle.x = 300;
+  signTextTitle.y = 260;
+  signTextTitle.anchor.set(0.5);
+  signContainer.addChild(signTextTitle);
+  const signTextBody = new PIXI.Text('', TEXT_STYLE.SIGN_BODY);
+  signTextBody.x = 300;
+  signTextBody.y = 315;
+  signTextBody.anchor.set(0.5);
+  signContainer.addChild(signTextBody);
+
+  const displaySign = (signProp): void => {
+    const signAlpha = signProp.collided ? 0.9 : 0;
+
+    if (signProp.collided) {
+      signTextTitle.text = `${signProp.title}`;
+      signTextBody.text = `${signProp.body}`;
+    }
+
+    signContainer.alpha = signAlpha;
+
+    // gsap.to(signContainer, {
+    //   duration: 0.1,
+    //   alpha: signAlpha,
+    //   ease: Power0.easeOut,
+    // });
+  };
+
+  // Collision Detection -------------------------------
+  const simpleCollision = (nX, nY, hitBox): boolean => {
+    const pX = playerCharacter.container.x;
+    const pY = playerCharacter.container.y;
+    // check collision by x/y locations with a hitbox buffer
+
+    return (
+      pX > nX - hitBox.x &&
+      pX < nX + hitBox.x &&
+      pY > nY - hitBox.y &&
+      pY < nY + hitBox.y
+    );
+  };
+
   const checkCollision = (): void => {
     if (state.isGameOver) return;
 
-    const pX = playerCharacter.container.x;
-    const pY = playerCharacter.container.y;
     const gold = goldSpawnerRef.getNuggets();
 
+    // Room Items
+    const roomItems: Rooms.RoomItems = Rooms.getItemsInRoom(state);
+
+    displaySign({ collided: false });
+
+    roomItems?.forEach((item) => {
+      if (item.itemType === ROOM_ITEM_TYPES.SIGN) {
+        const collided = simpleCollision(item.pos.x, item.pos.y, {
+          x: 50,
+          y: 30,
+        });
+
+        collided &&
+          displaySign({ collided, title: item.title, body: item.body });
+      }
+    });
+
+    // Collectable Collision
     gold.map((n, i) => {
       const nX = n.container.x;
       const nY = n.container.y;
 
-      // check collision by x/y locations with a hitbox buffer
-      const hitBox = 20 * playerCharacter.getSize();
-
-      const collided =
-        pX > nX - hitBox &&
-        pX < nX + hitBox &&
-        pY > nY - hitBox &&
-        pY < nY + hitBox;
+      const hitBox = SPRITE_MARGIN * playerCharacter.getSize();
+      const collided = simpleCollision(nX, nY, {
+        x: hitBox,
+        y: hitBox,
+      });
 
       //  collided && playerCharacter.grow();
 
       if (collided) {
-        collided && goldSpawnerRef.removeNuggetByIndex(i);
-        collided && goldContainer.removeChildAt(i);
+        goldSpawnerRef.removeNuggetByIndex(i);
+        goldContainer.removeChildAt(i);
         scoreDisplay.addToScore(POINTS_GOLD);
         const rsnd = `chom${Math.round(Math.random() * 2)}`;
         pixiSound.play(rsnd, {
@@ -534,12 +443,21 @@ export const gameLogic = (props: Props): GameLogic => {
           }, 750);
         }
 
-        collided && runtime.setLimit(runtime.getLimit() + 1);
+        runtime.setLimit(runtime.getLimit() + 1);
       }
     });
 
     // Check Exits
-    checkExit();
+    Rooms.checkExit(state, {
+      itemContainer,
+      transitionSprite,
+      playerCharacter,
+      bloodContainer,
+      goldSpawnerRef,
+      burpContainer,
+      roomContainer,
+      cleanUpGold,
+    });
   };
 
   const update = (delta): boolean => {

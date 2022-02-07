@@ -14,3 +14,6 @@ export * from './tempOBTS';
 
 // Constants for Simple Game example
 export * from './simpleGame';
+
+// Miri's Game "Balls the Rat"
+export * from './ballstherat';
