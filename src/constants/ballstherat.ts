@@ -43,16 +43,6 @@ export const MAP_DATA = [
         title: 'CHEESE',
         body: 'Cheese is Life.\n Life is Time.\n Time is Cheese.',
       },
-
-      {
-        itemType: ROOM_ITEM_TYPES.COLLECTABLE,
-        pos: { x: 500, y: 500 },
-        isActive: true,
-        score: 1000,
-        time: 5,
-        isAnimated: true,
-        assetPath: 'pie', // can be either full texture path if isAnimated is false (assetPath: './assets/miri-game/keylimepie.png',), or a reference to the anim key
-      },
     ],
   },
   { exits: { n: -1, s: 4, e: 2, w: -1 } }, // 3
@@ -97,7 +87,8 @@ export const MAP_DATA = [
         isActive: true,
         score: 1000,
         time: 5,
-        assetPath: './assets/miri-game/keylimepie.png',
+        isAnimated: true,
+        assetPath: 'pie', // can be either full texture path if isAnimated is false (assetPath: './assets/miri-game/keylimepie.png',), or a reference to the anim key
       },
     ],
   }, // 7

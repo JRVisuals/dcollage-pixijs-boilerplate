@@ -22,8 +22,12 @@ export type MapRoomData = {
   items?: RoomItems;
 };
 export type MapData = MapRoomData[];
-const mapData: MapData = MAP_DATA;
+let mapData: MapData = { ...MAP_DATA };
 let anims;
+
+export const reset = (): void => {
+  mapData = JSON.parse(JSON.stringify(MAP_DATA));
+};
 
 export const initAnimations = (spriteSheets): void => {
   anims = spriteSheets;

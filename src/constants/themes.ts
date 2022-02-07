@@ -34,7 +34,7 @@ const _COLORS = {
   SOLAR_CYAN: 0x2aa198,
   SOLAR_GREEN: 0x859900,
 
-  BALLS_BROWN_DARK: 0x331100,
+  BALLS_BROWN_DARK: 0x190f00,
 };
 export const _THEMES = {
   // prettier-ignore
@@ -106,18 +106,30 @@ export const _THEMES = {
   },
   // prettier-ignore
   BALLSTHERAT: {
-      NAME: 'BALLSTHERAT',
-      BG_HEX:             _COLORS.ORIGINAL_BLACK,
-     
-      TXT_SIGN_TITLE:     _COLORS.ORIGINAL_BLACK,
-      TXT_SIGN_BODY:      _COLORS.BALLS_BROWN_DARK,
+    
+    NAME: 'BALLSTHERAT',
+    
+      LOGO_HEX:           _COLORS.GAMEBOY_D,
+      OUTLINES_HEX:       _COLORS.GAMEBOY_A,
+      TARGET_OUTLINE_HEX: _COLORS.GAMEBOY_A,
+      JETS_OUTLINE_HEX: _COLORS.GAMEBOY_A,
       
+      FILLS_HEX:          _COLORS.GAMEBOY_B,
+      TARGET_FILL_HEX:    _COLORS.GAMEBOY_B,
+      JETS_FILL_HEX:      _COLORS.GAMEBOY_B,
+      
+      PARTICLE_HEX:       _COLORS.GAMEBOY_D,
       TXT_TITLES_HEX:     _COLORS.GAMEBOY_D,
       TXT_INFO_HEX:       _COLORS.GAMEBOY_C,
       TXT_HUD_HEX:        _COLORS.GAMEBOY_B,
       TXT_TARGET_HEX:     _COLORS.GAMEBOY_C,
       TXT_BULLET_HEX:     _COLORS.GAMEBOY_D,
       BUTTON_HEX: _COLORS.GAMEBOY_C,
-      PARTICLE_HEX:       _COLORS.GAMEBOY_D,
+
+      BG_HEX:             _COLORS.ORIGINAL_BLACK,
+     
+      TXT_SIGN_TITLE:     _COLORS.ORIGINAL_BLACK,
+      TXT_SIGN_BODY:      _COLORS.BALLS_BROWN_DARK,
+      
   },
 };

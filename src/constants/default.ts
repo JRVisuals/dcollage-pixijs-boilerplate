@@ -20,5 +20,5 @@ export const Z_MC_UI = 1;
 export const Z_MC_BASE = 0;
 
 // Audio
-export const MUSIC_VOL_MULT = 0.0;
+export const MUSIC_VOL_MULT = 0.2;
 export const SFX_VOL_MULT = 1.0;

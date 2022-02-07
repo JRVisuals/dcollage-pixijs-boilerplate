@@ -96,7 +96,7 @@ export const bestScoreDisplay = (props: BestScoreProps): BestScoreDisplay => {
   particleContainer.name = 'best score particles';
   container.addChild(particleContainer);
   // Tint Matrix for Color Modes
-  tintDisplayObject(particleContainer, THEME.PARTICLE_HEX);
+  // tintDisplayObject(particleContainer, THEME.PARTICLE_HEX);
   particleContainer.alpha = 0;
   const colorObject = {
     color: {

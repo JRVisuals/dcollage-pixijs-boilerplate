@@ -193,6 +193,7 @@ export const gameLogic = (props: Props): GameLogic => {
     state.currentLevel = 0;
     state.currentRoom = 1;
     state.isOnSign = false;
+    Rooms.reset();
     Rooms.roomTransition(
       state,
       {
