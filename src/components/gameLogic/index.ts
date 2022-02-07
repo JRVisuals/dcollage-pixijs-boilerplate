@@ -12,7 +12,6 @@ import {
   PLAYER_CONTINOUS_MOVEMENT,
   IS_SCORE_INCREMENTY,
   MUSIC_VOL_MULT,
-  MAP_DATA,
   SPRITE_MARGIN,
   ROOM_ITEM_TYPES,
   TEXT_STYLE,
@@ -21,7 +20,7 @@ import * as COMP from '..';
 import { PlayerCharacter } from '../playerCharacter';
 import { RunTime } from '../library/runtime';
 import { Spritesheets } from '@src/core';
-import { scoreDisplay, ScoreDisplay } from '../library/scoreDisplay';
+import { ScoreDisplay } from '../library/scoreDisplay';
 import { goldSpawner } from './goldSpawner';
 import { burpDrop } from '../burpDrop';
 import * as Rooms from './rooms';
@@ -71,6 +70,7 @@ export const gameLogic = (props: Props): GameLogic => {
     isGamePaused: false,
     playerScore: 0,
     currentRoom: 1,
+    isOnSign: false,
   };
   const initialState = { ...state };
 
@@ -143,6 +143,7 @@ export const gameLogic = (props: Props): GameLogic => {
     // Player Animations now that we have spritesheet ref
     playerCharacter.initAnimations(spriteSheetsRef.main.animations); // <-- example anims are pulled from `.main` but will usually be in `.game`
     goldSpawnerRef.initAnimations(spriteSheetsRef.main.animations);
+    Rooms.initAnimations(spriteSheetsRef.main.animations);
   };
 
   const getIsGameOver = (): boolean => {
@@ -191,6 +192,7 @@ export const gameLogic = (props: Props): GameLogic => {
     //
     state.currentLevel = 0;
     state.currentRoom = 1;
+    state.isOnSign = false;
     Rooms.roomTransition(
       state,
       {
@@ -301,7 +303,6 @@ export const gameLogic = (props: Props): GameLogic => {
   gameContainerTop.addChild(goldContainer);
 
   // Simple Player Component
-
   const playerCharacter = COMP.playerCharacter({
     pos: { x: APP_WIDTH / 2, y: APP_HEIGHT / 2 },
     bloodContainer,
@@ -355,20 +356,49 @@ export const gameLogic = (props: Props): GameLogic => {
   signContainer.addChild(signTextBody);
 
   const displaySign = (signProp): void => {
-    const signAlpha = signProp.collided ? 0.9 : 0;
+    if (state.isOnSign) return;
+    state.isOnSign = true;
+    signTextTitle.text = `${signProp.title}`;
+    signTextBody.text = `${signProp.body}`;
 
-    if (signProp.collided) {
-      signTextTitle.text = `${signProp.title}`;
-      signTextBody.text = `${signProp.body}`;
+    gsap.killTweensOf(signContainer);
+    gsap.to(signContainer, {
+      delay: 0.2,
+      duration: 0.2,
+      alpha: 0.8,
+      ease: Power0.easeOut,
+    });
+  };
+
+  const getCollectable = (item, index): void => {
+    Rooms.pickUpItem(state.currentRoom, index);
+    scoreDisplay.addToScore(item.score);
+    runtime.setLimit(runtime.getLimit() + item.time);
+    pixiSound.play('coin', {
+      volume: 1 * SFX_VOL_MULT,
+    });
+    playEatAndBurp();
+  };
+
+  const playEatAndBurp = () => {
+    const rsnd = `chom${Math.round(Math.random() * 2)}`;
+    pixiSound.play(rsnd, {
+      volume: 1 * SFX_VOL_MULT,
+    });
+
+    if (Math.random() > 0.75) {
+      setTimeout(() => {
+        pixiSound.play('burp', { volume: 0.5 * SFX_VOL_MULT });
+        burpContainer.addChild(
+          burpDrop({
+            pos: {
+              x: playerCharacter.container.x,
+              y: playerCharacter.container.y - 20,
+            },
+          }).container
+        );
+      }, 750);
     }
-
-    signContainer.alpha = signAlpha;
-
-    // gsap.to(signContainer, {
-    //   duration: 0.1,
-    //   alpha: signAlpha,
-    //   ease: Power0.easeOut,
-    // });
   };
 
   // Collision Detection -------------------------------
@@ -377,12 +407,13 @@ export const gameLogic = (props: Props): GameLogic => {
     const pY = playerCharacter.container.y;
     // check collision by x/y locations with a hitbox buffer
 
-    return (
+    const collided =
       pX > nX - hitBox.x &&
       pX < nX + hitBox.x &&
       pY > nY - hitBox.y &&
-      pY < nY + hitBox.y
-    );
+      pY < nY + hitBox.y;
+
+    return collided;
   };
 
   const checkCollision = (): void => {
@@ -393,19 +424,41 @@ export const gameLogic = (props: Props): GameLogic => {
     // Room Items
     const roomItems: Rooms.RoomItems = Rooms.getItemsInRoom(state);
 
-    displaySign({ collided: false });
+    let collidedSigns = 0;
+    for (let index = 0; index < roomItems?.length; index++) {
+      const item = roomItems[index];
+      if (!item.isActive) break;
 
-    roomItems?.forEach((item) => {
       if (item.itemType === ROOM_ITEM_TYPES.SIGN) {
         const collided = simpleCollision(item.pos.x, item.pos.y, {
           x: 50,
           y: 30,
         });
 
-        collided &&
+        if (collided) {
           displaySign({ collided, title: item.title, body: item.body });
+          collidedSigns++;
+        }
       }
-    });
+
+      if (item.itemType === ROOM_ITEM_TYPES.COLLECTABLE) {
+        const collided = simpleCollision(item.pos.x, item.pos.y, {
+          x: 40,
+          y: 40,
+        });
+
+        collided && getCollectable(item, index);
+      }
+    }
+
+    if (collidedSigns === 0) {
+      state.isOnSign = false;
+      gsap.to(signContainer, {
+        duration: 0.1,
+        alpha: 0,
+        ease: Power0.easeOut,
+      });
+    }
 
     // Collectable Collision
     gold.map((n, i) => {
@@ -424,24 +477,7 @@ export const gameLogic = (props: Props): GameLogic => {
         goldSpawnerRef.removeNuggetByIndex(i);
         goldContainer.removeChildAt(i);
         scoreDisplay.addToScore(POINTS_GOLD);
-        const rsnd = `chom${Math.round(Math.random() * 2)}`;
-        pixiSound.play(rsnd, {
-          volume: 1 * SFX_VOL_MULT,
-        });
-
-        if (Math.random() > 0.75) {
-          setTimeout(() => {
-            pixiSound.play('burp', { volume: 0.5 * SFX_VOL_MULT });
-            burpContainer.addChild(
-              burpDrop({
-                pos: {
-                  x: playerCharacter.container.x,
-                  y: playerCharacter.container.y - 20,
-                },
-              }).container
-            );
-          }, 750);
-        }
+        playEatAndBurp();
 
         runtime.setLimit(runtime.getLimit() + 1);
       }

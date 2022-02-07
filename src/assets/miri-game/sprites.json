@@ -2,7 +2,7 @@
 
 "balls0.png":
 {
-	"frame": {"x":195,"y":1,"w":54,"h":64},
+	"frame": {"x":1,"y":131,"w":54,"h":64},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":4,"y":0,"w":54,"h":64},
@@ -10,7 +10,7 @@
 },
 "balls1.png":
 {
-	"frame": {"x":34,"y":1,"w":60,"h":62},
+	"frame": {"x":1,"y":67,"w":60,"h":62},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":0,"y":2,"w":60,"h":62},
@@ -18,7 +18,7 @@
 },
 "balls2.png":
 {
-	"frame": {"x":251,"y":1,"w":55,"h":64},
+	"frame": {"x":65,"y":1,"w":55,"h":64},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":3,"y":0,"w":55,"h":64},
@@ -26,7 +26,7 @@
 },
 "balls3.png":
 {
-	"frame": {"x":308,"y":1,"w":62,"h":64},
+	"frame": {"x":1,"y":1,"w":62,"h":64},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":1,"y":0,"w":62,"h":64},
@@ -34,7 +34,7 @@
 },
 "cheese0.png":
 {
-	"frame": {"x":96,"y":1,"w":31,"h":62},
+	"frame": {"x":156,"y":131,"w":31,"h":62},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":1,"y":2,"w":31,"h":62},
@@ -42,7 +42,7 @@
 },
 "cheese1.png":
 {
-	"frame": {"x":1,"y":1,"w":31,"h":61},
+	"frame": {"x":189,"y":131,"w":31,"h":61},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":1,"y":3,"w":31,"h":61},
@@ -50,7 +50,7 @@
 },
 "cheese2.png":
 {
-	"frame": {"x":372,"y":1,"w":31,"h":64},
+	"frame": {"x":57,"y":131,"w":31,"h":64},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":1,"y":0,"w":31,"h":64},
@@ -58,7 +58,7 @@
 },
 "cheese3.png":
 {
-	"frame": {"x":129,"y":1,"w":31,"h":63},
+	"frame": {"x":90,"y":130,"w":31,"h":63},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":1,"y":1,"w":31,"h":63},
@@ -66,23 +66,104 @@
 },
 "cheese4.png":
 {
-	"frame": {"x":162,"y":1,"w":31,"h":63},
+	"frame": {"x":123,"y":130,"w":31,"h":63},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":1,"y":1,"w":31,"h":63},
 	"sourceSize": {"w":32,"h":64}
+},
+"pie0.png":
+{
+	"frame": {"x":178,"y":46,"w":59,"h":38},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":5,"w":59,"h":38},
+	"sourceSize": {"w":60,"h":48}
+},
+"pie1.png":
+{
+	"frame": {"x":1,"y":197,"w":57,"h":40},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":3,"w":57,"h":40},
+	"sourceSize": {"w":60,"h":48}
+},
+"pie2.png":
+{
+	"frame": {"x":63,"y":67,"w":54,"h":43},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":2,"y":0,"w":54,"h":43},
+	"sourceSize": {"w":60,"h":48}
+},
+"pie3.png":
+{
+	"frame": {"x":182,"y":1,"w":54,"h":43},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":2,"y":0,"w":54,"h":43},
+	"sourceSize": {"w":60,"h":48}
+},
+"pie4.png":
+{
+	"frame": {"x":180,"y":86,"w":53,"h":43},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":0,"w":53,"h":43},
+	"sourceSize": {"w":60,"h":48}
+},
+"pie5.png":
+{
+	"frame": {"x":115,"y":195,"w":53,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":2,"w":53,"h":41},
+	"sourceSize": {"w":60,"h":48}
+},
+"pie6.png":
+{
+	"frame": {"x":60,"y":197,"w":53,"h":40},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":3,"w":53,"h":40},
+	"sourceSize": {"w":60,"h":48}
+},
+"pie7.png":
+{
+	"frame": {"x":122,"y":45,"w":54,"h":43},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":0,"w":54,"h":43},
+	"sourceSize": {"w":60,"h":48}
+},
+"pie8.png":
+{
+	"frame": {"x":122,"y":1,"w":58,"h":42},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":1,"w":58,"h":42},
+	"sourceSize": {"w":60,"h":48}
+},
+"pie9.png":
+{
+	"frame": {"x":119,"y":90,"w":59,"h":38},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":5,"w":59,"h":38},
+	"sourceSize": {"w":60,"h":48}
 }},
 "animations": {
 	"balls": ["balls0.png","balls1.png","balls2.png","balls3.png"],
-	"cheese": ["cheese0.png","cheese1.png","cheese2.png","cheese3.png","cheese4.png"]
+	"cheese": ["cheese0.png","cheese1.png","cheese2.png","cheese3.png","cheese4.png"],
+	"pie": ["pie0.png","pie1.png","pie2.png","pie3.png","pie4.png","pie5.png","pie6.png","pie7.png","pie8.png","pie9.png"]
 },
 "meta": {
 	"app": "https://www.codeandweb.com/texturepacker",
 	"version": "1.0",
 	"image": "sprites.png",
 	"format": "RGBA8888",
-	"size": {"w":404,"h":66},
+	"size": {"w":238,"h":238},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:cac913c37d32364e3286322801ecab71:8247e93a5f4706572a45fea181ce8cd4:1eabdf11f75e3a4fe3147baf7b5be24b$"
+	"smartupdate": "$TexturePacker:SmartUpdate:cec13d7132b297300a04c6ebbf470f3f:a58d539a53fba0837ffcfd2b812bb824:1eabdf11f75e3a4fe3147baf7b5be24b$"
 }
 }

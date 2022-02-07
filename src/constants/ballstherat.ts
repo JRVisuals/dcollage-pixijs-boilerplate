@@ -1,5 +1,6 @@
 export enum ROOM_ITEM_TYPES {
   SIGN,
+  COLLECTABLE,
 }
 export const MAP_DATA = [
   // 0 ---------
@@ -11,18 +12,21 @@ export const MAP_DATA = [
       {
         itemType: ROOM_ITEM_TYPES.SIGN,
         pos: { x: 300, y: 300 },
+        isActive: true,
         title: 'TO MOVE:',
         body: 'Press the  W, A, S, D\n keys on your keyboard.',
       },
       {
         itemType: ROOM_ITEM_TYPES.SIGN,
         pos: { x: 90, y: 230 },
+        isActive: true,
         title: 'LOCKED',
         body: 'Find the key that\nopens this door.',
       },
       {
         itemType: ROOM_ITEM_TYPES.SIGN,
         pos: { x: 400, y: 500 },
+        isActive: true,
         title: 'EXIT',
         body: 'This door is open,\nstep on through.',
       },
@@ -35,8 +39,19 @@ export const MAP_DATA = [
       {
         itemType: ROOM_ITEM_TYPES.SIGN,
         pos: { x: 300, y: 300 },
+        isActive: true,
         title: 'CHEESE',
         body: 'Cheese is Life.\n Life is Time.\n Time is Cheese.',
+      },
+
+      {
+        itemType: ROOM_ITEM_TYPES.COLLECTABLE,
+        pos: { x: 500, y: 500 },
+        isActive: true,
+        score: 1000,
+        time: 5,
+        isAnimated: true,
+        assetPath: 'pie', // can be either full texture path if isAnimated is false (assetPath: './assets/miri-game/keylimepie.png',), or a reference to the anim key
       },
     ],
   },
@@ -48,6 +63,7 @@ export const MAP_DATA = [
       {
         itemType: ROOM_ITEM_TYPES.SIGN,
         pos: { x: 300, y: 300 },
+        isActive: true,
         title: 'A MAZE ING',
         body: 'Feel like a rat in a maze?\n Me too.',
       },
@@ -59,6 +75,7 @@ export const MAP_DATA = [
       {
         itemType: ROOM_ITEM_TYPES.SIGN,
         pos: { x: 300, y: 300 },
+        isActive: true,
         title: 'KEY LIME',
         body: 'What would really be nice is if you could find a key. Or a pie.',
       },
@@ -70,8 +87,17 @@ export const MAP_DATA = [
       {
         itemType: ROOM_ITEM_TYPES.SIGN,
         pos: { x: 300, y: 300 },
+        isActive: true,
         title: 'DEAD END',
         body: 'These signs are kinda dumb.\nSo is this room.',
+      },
+      {
+        itemType: ROOM_ITEM_TYPES.COLLECTABLE,
+        pos: { x: 500, y: 500 },
+        isActive: true,
+        score: 1000,
+        time: 5,
+        assetPath: './assets/miri-game/keylimepie.png',
       },
     ],
   }, // 7
@@ -82,6 +108,7 @@ export const MAP_DATA = [
       {
         itemType: ROOM_ITEM_TYPES.SIGN,
         pos: { x: 300, y: 300 },
+        isActive: true,
         title: 'DOOR KEY',
         body: "Future home of a key.\n Sorry, you're a stuck for now.",
       },

@@ -119,7 +119,5 @@ export const _THEMES = {
       TXT_BULLET_HEX:     _COLORS.GAMEBOY_D,
       BUTTON_HEX: _COLORS.GAMEBOY_C,
       PARTICLE_HEX:       _COLORS.GAMEBOY_D,
-      
-
   },
 };

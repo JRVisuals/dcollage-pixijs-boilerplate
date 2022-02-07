@@ -1,4 +1,5 @@
 import * as PIXI from 'pixi.js';
+
 import gsap, { Power0 } from 'gsap';
 
 import { MAP_DATA, ROOM_ITEM_TYPES } from '@src/constants';
@@ -7,8 +8,14 @@ import { MAP_DATA, ROOM_ITEM_TYPES } from '@src/constants';
 export type RoomItems = {
   itemType: ROOM_ITEM_TYPES;
   pos: { x: number; y: number };
+  isActive: boolean;
   title?: string;
   body?: string;
+  score?: number;
+  time?: number;
+  isAnimated?: boolean;
+  assetPath?: string;
+  spriteRef?: PIXI.Sprite;
 }[];
 export type MapRoomData = {
   exits: { n: number; s: number; e: number; w: number };
@@ -16,6 +23,11 @@ export type MapRoomData = {
 };
 export type MapData = MapRoomData[];
 const mapData: MapData = MAP_DATA;
+let anims;
+
+export const initAnimations = (spriteSheets): void => {
+  anims = spriteSheets;
+};
 
 export const roomTransition = (state, refs, dir): void => {
   refs.playerCharacter.container.alpha = 0;
@@ -112,6 +124,17 @@ export const getItemsInRoom = (state): RoomItems => {
   return currentRoomData.items;
 };
 
+export const pickUpItem = (room, index): void => {
+  console.log('room pick up item', mapData[room].items[index]);
+
+  mapData[room].items[index].isActive = false;
+  gsap.to(mapData[room].items[index].spriteRef, {
+    duration: 0.1,
+    pixi: { alpha: 0 },
+    ease: Power0.easeOut,
+  });
+};
+
 export const renderRoom = (state, refs, dir): void => {
   console.log('<renderRoom>');
   // Cleanup last room
@@ -134,7 +157,6 @@ export const renderRoom = (state, refs, dir): void => {
 
   currentRoomData.items?.forEach((item) => {
     if (item.itemType === ROOM_ITEM_TYPES.SIGN) {
-      console.log('this room has a sign', currentRoomData);
       const signTexture = PIXI.Texture.from('./assets/miri-game/readme.png');
       const signSprite = new PIXI.Sprite(signTexture);
       signSprite.x = item.pos.x;
@@ -142,6 +164,25 @@ export const renderRoom = (state, refs, dir): void => {
       signSprite.scale.set(2.0);
       signSprite.anchor.set(0.5);
       refs.itemContainer.addChild(signSprite);
+    }
+    if (item.itemType === ROOM_ITEM_TYPES.COLLECTABLE) {
+      if (item.isActive) {
+        let itemSprite;
+        if (item.isAnimated) {
+          itemSprite = new PIXI.AnimatedSprite(anims[item.assetPath]);
+          itemSprite.animationSpeed = 0.2;
+          itemSprite.play();
+        } else {
+          const itemTexture = PIXI.Texture.from(item.assetPath);
+          itemSprite = new PIXI.Sprite(itemTexture);
+        }
+        itemSprite.x = item.pos.x;
+        itemSprite.y = item.pos.y;
+        itemSprite.scale.set(2.0);
+        itemSprite.anchor.set(0.5);
+        const spriteRef = refs.itemContainer.addChild(itemSprite);
+        item.spriteRef = spriteRef;
+      }
     }
   });
 
